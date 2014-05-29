@@ -11,4 +11,4 @@ script:
   - go get github.com/mattn/goveralls
   - export PATH=$PATH:$HOME/gopath/bin/
   - ./test.sh
-  - goveralls -coverprofile=coverage.out rgaztLT7pidhfXGLbQz3bMowiBeB1XJlS
+  - goveralls -coverprofile=coverage.out yvioG2HuiqP3zHHdN5AaI64WaKVAzzOOj
