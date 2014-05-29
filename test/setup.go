@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/clipperhouse/typewriter"
-	_ "github.com/wfreeman/typewriters/sortedcontainer"
+	_ "gopkg.in/wfreeman/sortedcontainers.v0"
 )
 
 func main() {

@@ -1,0 +1,14 @@
+language: go
+go: 
+  - 1.2
+
+before_install:
+  - go get code.google.com/p/go.tools/cmd/cover
+
+script:
+  - cd test
+  - go get github.com/axw/gocov/gocov
+  - go get github.com/mattn/goveralls
+  - export PATH=$PATH:$HOME/gopath/bin/
+  - ./test.sh
+  - goveralls -coverprofile=coverage.out rgaztLT7pidhfXGLbQz3bMowiBeB1XJlS
