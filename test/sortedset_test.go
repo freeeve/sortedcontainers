@@ -25,7 +25,10 @@ SOFTWARE.
 
 package main
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func makeSortedSet(ints []int) ThingSortedSet {
 	set := NewThingSortedSet(func(a, b Thing) bool { return a < b })
@@ -266,6 +269,12 @@ func Test_SetIntersect(t *testing.T) {
 	if !(d.Cardinality() == 1 && d.Contains(10)) {
 		t.Error("set d should have a size of 1 and contain the item 10")
 	}
+
+	e := b.Intersect(a)
+
+	if !(e.Cardinality() == 1 && e.Contains(10)) {
+		t.Error("set e should have a size of 1 and contain the item 10")
+	}
 }
 
 func Test_SetDifference(t *testing.T) {
@@ -346,9 +355,16 @@ func Test_SetEqual(t *testing.T) {
 	if !a.Equal(b) {
 		t.Error("a and b should be equal with the same number of elements")
 	}
+
+	a.Add(9)
+	a.Remove(8)
+
+	if a.Equal(b) {
+		t.Error("a and b should not be equal, although they have the same number of elements")
+	}
 }
 
-func Test_SetClone(t *testing.T) {
+func Test_SortedSetClone(t *testing.T) {
 	a := NewThingSortedSet(func(a, b Thing) bool { return a < b })
 	a.Add(1)
 	a.Add(2)
@@ -375,10 +391,18 @@ func Test_SetClone(t *testing.T) {
 func Test_SortedSetIterator(t *testing.T) {
 	a := NewThingSortedSet(func(a, b Thing) bool { return a < b })
 
-	a.Add(1)
-	a.Add(2)
-	a.Add(3)
 	a.Add(4)
+	a.Add(3)
+	a.Add(2)
+	a.Add(1)
+
+	i := Thing(1)
+	for val := range a.Iter() {
+		if val != i {
+			t.Error("sorted set doesn't iterate in order")
+		}
+		i++
+	}
 
 	b := NewThingSortedSet(func(a, b Thing) bool { return a < b })
 	for val := range a.Iter() {
@@ -387,5 +411,16 @@ func Test_SortedSetIterator(t *testing.T) {
 
 	if !a.Equal(b) {
 		t.Error("The sets are not equal after iterating through the first set")
+	}
+}
+
+func Test_SortedSetFromSlice(t *testing.T) {
+	slc := []Thing{3, 2, 1, 4}
+	a := NewThingSortedSetFromSlice(func(a, b Thing) bool { return a < b }, slc)
+
+	for i := Thing(1); i <= 4; i++ {
+		if !a.Contains(i) {
+			t.Error(fmt.Sprintf("the set didn't contain %d", i))
+		}
 	}
 }
