@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/clipperhouse/typewriter"
+	"github.com/clipperhouse/gen/typewriter"
 	_ "gopkg.in/wfreeman/sortedcontainers.v0"
 )
 

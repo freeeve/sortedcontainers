@@ -3,7 +3,7 @@ package container
 import (
 	"io"
 
-	"github.com/clipperhouse/typewriter"
+	"github.com/clipperhouse/gen/typewriter"
 )
 
 func init() {
@@ -17,8 +17,8 @@ type ContainerWriter struct {
 	tagsByType map[string]typewriter.Tag // typewriter.Type is not comparable, key by .String()
 }
 
-func NewContainerWriter() ContainerWriter {
-	return ContainerWriter{
+func NewContainerWriter() *ContainerWriter {
+	return &ContainerWriter{
 		tagsByType: make(map[string]typewriter.Tag),
 	}
 }
@@ -48,11 +48,14 @@ func (c ContainerWriter) WriteHeader(w io.Writer, t typewriter.Type) {
 	}
 }
 
-func (c ContainerWriter) Imports(t typewriter.Type) []string {
-	return []string{"math", "math/rand"}
+func (c ContainerWriter) Imports(t typewriter.Type) []typewriter.ImportSpec {
+	return []typewriter.ImportSpec{
+		typewriter.ImportSpec{Path: "math"},
+		typewriter.ImportSpec{Path: "math/rand"},
+	}
 }
 
-func (c ContainerWriter) Write(w io.Writer, t typewriter.Type) {
+func (c ContainerWriter) WriteBody(w io.Writer, t typewriter.Type) {
 	tag := c.tagsByType[t.String()] // validated above
 
 	for _, s := range tag.Items {
