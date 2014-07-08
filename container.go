@@ -29,10 +29,28 @@ func (c ContainerWriter) Name() string {
 
 func (c ContainerWriter) Validate(t typewriter.Type) (bool, error) {
 	tag, found, err := t.Tags.ByName("containers")
-	if found && err == nil {
-		c.tagsByType[t.String()] = tag
+
+	if !found || err != nil {
+		return false, err
 	}
-	return found, err
+
+	// must include at least one item that we recognize
+	any := false
+	for _, item := range tag.Items {
+		if templates.Contains(item) {
+			// found one, move on
+			any = true
+			break
+		}
+	}
+
+	if !any {
+		// not an error, but irrelevant
+		return false, nil
+	}
+
+	c.tagsByType[t.String()] = tag
+	return true, nil
 }
 
 func (c ContainerWriter) WriteHeader(w io.Writer, t typewriter.Type) {
