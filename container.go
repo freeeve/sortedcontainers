@@ -77,7 +77,7 @@ func (c ContainerWriter) WriteBody(w io.Writer, t typewriter.Type) {
 	tag := c.tagsByType[t.String()] // validated above
 
 	for _, s := range tag.Items {
-		tmpl, err := containerTemplates.Get(s)
+		tmpl, err := templates.Get(s)
 		if err != nil {
 			continue
 		}
